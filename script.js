@@ -55,6 +55,29 @@ function populateDisplay(displayValue){
     let display = document.getElementById('screen')
     if(displayValue === 'clear'){
         clearScreen(display)
+        resetCalc()
+    }
+    else if(displayValue == '.'){
+        if (display.textContent.includes('.')){
+
+        }
+        else {
+            display.textContent += displayValue
+        }
+    }
+    else if(displayValue =='+' || displayValue =='-' || displayValue =='*' || displayValue =='/'){
+        if(storedVals.operator === ''){
+            saveValues(display.textContent, displayValue)
+            clearScreen(display)
+            console.log(storedVals)
+        }
+        else{
+            console.log('This case should evaluate what we have so far')
+        }
+    }
+    else if(displayValue === '='){
+        storeSecond(display.textContent)
+        evaluate(display)
     }
     else{
         display.textContent += displayValue
@@ -65,4 +88,30 @@ function clearScreen(display){
     display.textContent = ''
 }
 
+function resetCalc(){
+    storedVals.first = NaN
+    storedVals.second = NaN
+    storedVals.operator = ''
+}
+
+function saveValues(val1, operation){
+    storedVals.first = parseFloat(val1)
+    storedVals.operator = operation
+}
+
+function storeSecond(val2){
+    storedVals.second = parseFloat(val2)
+}
+
+function evaluate(display){
+    display.textContent = operate(storedVals.operator, storedVals.first, storedVals.second)
+}
+
+let storedVals = {
+    first: NaN,
+    second: NaN,
+    operator: ''
+}
+
 turnOnButtons()
+
