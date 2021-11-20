@@ -45,3 +45,24 @@ function operate(operator, num1, num2){
     return( result )
 }
 
+function turnOnButtons() {
+    addEventListener( 'click', function (e) {
+        populateDisplay(e.target.id)
+    })
+}
+
+function populateDisplay(displayValue){
+    let display = document.getElementById('screen')
+    if(displayValue === 'clear'){
+        clearScreen(display)
+    }
+    else{
+        display.textContent += displayValue
+    }
+}
+
+function clearScreen(display){
+    display.textContent = ''
+}
+
+turnOnButtons()
