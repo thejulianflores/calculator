@@ -46,7 +46,11 @@ function operate(operator, num1, num2){
         }
     }
     if(typeof(result) === 'number'){
-        return( Math. round(1000*result)/1000 )
+        result = Math. round(1000*result)/1000
+        if( result.toString().length > 14 )
+            result = "Overflow"
+        return( result )
+        
     }
     else return(result)
 }
@@ -103,7 +107,8 @@ function populateDisplay(displayValue){
         if(storedVals.currentStatus == 'input'){
             clearScreen(display)
             storedVals.currentStatus = 'waiting'
-            display.textContent += displayValue
+            if( display.textContent.length < 14)
+                display.textContent += displayValue
         }
         else if(displayValue == '.'){
             if( display.textContent.includes('.')){
@@ -112,7 +117,8 @@ function populateDisplay(displayValue){
             else display.textContent += displayValue
         }
         else {
-            display.textContent += displayValue
+            if( display.textContent.length < 14)
+                display.textContent += displayValue
         }
     }
 }
