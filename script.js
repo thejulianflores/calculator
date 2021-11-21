@@ -59,12 +59,16 @@ function turnOnCalculator() {
     addEventListener( 'click', function (e) {
         populateDisplay(e.target.id)
     })
+
+    addEventListener( 'keypress', function (e) {
+        populateDisplay(String.fromCharCode(e.keyCode))
+    })
 }
 
 function populateDisplay(displayValue){
     let display = document.getElementById('screen')
 
-    if ( displayValue == 'clear'){              //clears the screen
+    if ( displayValue == 'clear' || displayValue == 'c'){              //clears the screen
         display.textContent = ''
         resetCalc()
 
