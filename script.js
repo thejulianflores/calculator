@@ -47,7 +47,7 @@ function operate(operator, num1, num2){
     }
     if(typeof(result) === 'number'){
         result = Math. round(1000*result)/1000
-        if( result.toString().length > 14 )
+        if( result.toString().length > 11 )
             result = "Overflow"
         return( result )
         
@@ -107,7 +107,7 @@ function populateDisplay(displayValue){
         if(storedVals.currentStatus == 'input'){
             clearScreen(display)
             storedVals.currentStatus = 'waiting'
-            if( display.textContent.length < 14)
+            if( display.textContent.length < 11)
                 display.textContent += displayValue
         }
         else if(displayValue == '.'){
@@ -117,7 +117,7 @@ function populateDisplay(displayValue){
             else display.textContent += displayValue
         }
         else {
-            if( display.textContent.length < 14)
+            if( display.textContent.length < 11)
                 display.textContent += displayValue
         }
     }
