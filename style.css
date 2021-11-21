@@ -15,4 +15,7 @@ button {
 
 #screen {
     width: 165.24999px;
+    display:flex;
+    justify-content: center;
+    align-items: center;
 }

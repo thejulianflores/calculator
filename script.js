@@ -12,10 +12,10 @@ function multiply(num1, num2){
 
 function divide(num1, num2){
     if(num2 != 0){
-        return( num1 / num2)
+        return( num1 / num2 )
     }
     else{
-        return('Cannot Divide By 0')
+        return(`¯\\_(ツ)_/¯`)
     }
 }
 
@@ -28,24 +28,30 @@ function divide(num1, num2){
 
 function operate(operator, num1, num2){
     let result
-    switch( operator ){
-        case '+':
-            result = add(num1, num2)
-            break;
-        case '-':
-            result = subtract(num1, num2)
-            break;
-        case '*':
-            result = multiply(num1, num2)
-            break;
-        case '/':
-            result = divide(num1, num2)
-            break;
+    if(isNaN(num2) || isNaN(num1)) result = 0
+    else{
+        switch( operator ){
+            case '+':
+                result = add(num1, num2)
+                break;
+            case '-':
+                result = subtract(num1, num2)
+                break;
+            case '*':
+                result = multiply(num1, num2)
+                break;
+            case '/':
+                result = divide(num1, num2)
+                break;
+        }
     }
-    return( result )
+    if(typeof(result) === 'number'){
+        return( Math. round(1000*result)/1000 )
+    }
+    else return(result)
 }
 
-function turnOnButtons() {
+function turnOnCalculator() {
     addEventListener( 'click', function (e) {
         populateDisplay(e.target.id)
     })
@@ -53,34 +59,61 @@ function turnOnButtons() {
 
 function populateDisplay(displayValue){
     let display = document.getElementById('screen')
-    if(displayValue === 'clear'){
-        clearScreen(display)
-        resetCalc()
-    }
-    else if(displayValue == '.'){
-        if (display.textContent.includes('.')){
 
+    if ( displayValue == 'clear'){              //clears the screen
+        display.textContent = ''
+        resetCalc()
+
+    }
+
+    else if(displayValue == 'screen'){
+    }
+
+    else if(displayValue =='+'                  //when operator pressed
+            || displayValue =='-' 
+            || displayValue =='*' 
+            || displayValue =='/'){
+      
+        storedVals.currentStatus = 'input'
+
+        if(isNaN(storedVals.first)){
+            saveFirst(display.textContent)
+            saveOperator(displayValue)
+        //    clearScreen(display)
+        }
+        
+        else{
+            saveSecond(display.textContent)
+            display.textContent = evaluate()
+            saveFirst(display.textContent)
+            saveOperator(displayValue)
+        }
+ 
+    }
+
+    else if(displayValue == '='){
+        saveSecond(display.textContent)
+        display.textContent = evaluate()
+        saveFirst(NaN)
+        saveSecond(NaN)
+        storedVals.currentStatus = 'input'
+    }
+
+    else {
+        if(storedVals.currentStatus == 'input'){
+            clearScreen(display)
+            storedVals.currentStatus = 'waiting'
+            display.textContent += displayValue
+        }
+        else if(displayValue == '.'){
+            if( display.textContent.includes('.')){
+
+            }
+            else display.textContent += displayValue
         }
         else {
             display.textContent += displayValue
         }
-    }
-    else if(displayValue =='+' || displayValue =='-' || displayValue =='*' || displayValue =='/'){
-        if(storedVals.operator === ''){
-            saveValues(display.textContent, displayValue)
-            clearScreen(display)
-            console.log(storedVals)
-        }
-        else{
-            console.log('This case should evaluate what we have so far')
-        }
-    }
-    else if(displayValue === '='){
-        storeSecond(display.textContent)
-        evaluate(display)
-    }
-    else{
-        display.textContent += displayValue
     }
 }
 
@@ -91,27 +124,40 @@ function clearScreen(display){
 function resetCalc(){
     storedVals.first = NaN
     storedVals.second = NaN
+    storedVals.result = NaN
     storedVals.operator = ''
 }
 
-function saveValues(val1, operation){
-    storedVals.first = parseFloat(val1)
-    storedVals.operator = operation
+function saveFirst(value){
+    storedVals.first = parseFloat(value)
 }
 
-function storeSecond(val2){
-    storedVals.second = parseFloat(val2)
+function saveSecond(value){
+    storedVals.second = parseFloat(value)
 }
 
-function evaluate(display){
-    display.textContent = operate(storedVals.operator, storedVals.first, storedVals.second)
+function saveOperator(value){
+    storedVals.operator = value
 }
+
+function evaluate(){
+    storedVals.result = operate(storedVals.operator, storedVals.first, storedVals.second)
+    return storedVals.result
+}
+
+function clearRAM(){
+    storedVals.first = NaN
+    storedVals.second = NaN
+}
+
 
 let storedVals = {
     first: NaN,
     second: NaN,
-    operator: ''
+    result: NaN,
+    operator: '',
+    currentStatus: 'waiting'
 }
 
-turnOnButtons()
+turnOnCalculator()
 
